@@ -3,7 +3,7 @@ export const quizData = [
     "id": 1,
     "difficulty": "Dễ",
     "question": "Lực lượng nào trực tiếp tham gia sản xuất công nghiệp và vận hành máy móc?",
-    "scrambled": "iGa - pấC - gnôC - nâhN",
+    "scrambled": "iaiG - pấC - gnôC - nâhN",
     "correct": "Giai cấp công nhân"
   },
   {
@@ -31,7 +31,7 @@ export const quizData = [
     "id": 5,
     "difficulty": "Khó",
     "question": "Liên minh công - nông - trí góp phần giữ vững điều gì cho đất nước?",
-    "scrambled": "nỔ - hniĐ - hníhC - ịrT",
+    "scrambled": "nỔ - hnịĐ - hníhC - ịrT",
     "correct": "Ổn định chính trị"
   },
   {
