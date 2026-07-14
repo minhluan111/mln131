@@ -745,17 +745,3 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-.player-audio-wrapper {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1000;
-}
-
-@media (max-width: 600px) {
-  .player-audio-wrapper {
-    top: 0.5rem;
-    left: 0.5rem;
-  }
-}

@@ -11,7 +11,6 @@ import {
 } from "../firebase/gameService";
 import { useConfetti, useSoundEffects } from "../hooks/useGameEffects";
 import Confetti from "../components/Confetti";
-import AudioController from "../components/AudioController";
 import "./PlayerPage.css";
 
 const DIFFICULTY_COLOR = {
@@ -203,14 +202,6 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
   return (
     <div className="player-page">
       <Confetti particles={particles} />
-
-      {/* Audio controller widget */}
-      <div className="player-audio-wrapper">
-        <AudioController 
-          isPlayingBgm={phase === "join" || phase === "waiting" || phase === "question" || phase === "result"} 
-          isPlayingVictory={phase === "finished"} 
-        />
-      </div>
 
       {/* ── JOIN ── */}
       {phase === "join" && (

@@ -40,34 +40,18 @@ export default function AudioController({ isPlayingBgm, isPlayingVictory }) {
     }
   }, [isPlayingVictory]);
 
-  // Try playing audio on first user click or touch anywhere (to bypass autoplay block on mobile)
+  // Try playing audio on first user click anywhere (to bypass autoplay block)
   useEffect(() => {
     const startAudio = () => {
-      const bgm = bgmRef.current;
-      const victory = victoryRef.current;
-      if (!bgm || !victory) return;
-
-      // Force play and immediate pause of victory music to unlock it for future async playback
-      if (victory.paused && !isPlayingVictory) {
-        victory.play().then(() => {
-          victory.pause();
-          victory.currentTime = 0;
-        }).catch(() => {});
+      if (isPlayingBgm && !isPlayingVictory && bgmRef.current) {
+        bgmRef.current.play().catch(() => {});
       }
-
-      if (isPlayingBgm && !isPlayingVictory) {
-        bgm.play().catch(() => {});
-      }
-      if (isPlayingVictory) {
-        victory.play().catch(() => {});
+      if (isPlayingVictory && victoryRef.current) {
+        victoryRef.current.play().catch(() => {});
       }
     };
     window.addEventListener("click", startAudio);
-    window.addEventListener("touchstart", startAudio, { passive: true });
-    return () => {
-      window.removeEventListener("click", startAudio);
-      window.removeEventListener("touchstart", startAudio);
-    };
+    return () => window.removeEventListener("click", startAudio);
   }, [isPlayingBgm, isPlayingVictory]);
 
   return (
