@@ -13,7 +13,7 @@ export default function QuestionCard({
   showHint,
   onHint,
 }) {
-  const timePercent = (timeLeft / 30) * 100;
+  const timePercent = (timeLeft / 60) * 100;
   const isTimeLow = timeLeft <= 10;
   const isTimeCritical = timeLeft <= 5;
 

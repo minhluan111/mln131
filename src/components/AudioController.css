@@ -1,0 +1,70 @@
+.audio-controller {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0.5rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.audio-control-panel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.audio-mute-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.audio-mute-btn:hover {
+  transform: scale(1.15);
+}
+
+.audio-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 90px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.audio-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #818cf8;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
+  transition: transform 0.2s;
+}
+
+.audio-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.audio-volume-percent {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a5b4fc;
+  min-width: 35px;
+  text-align: right;
+}

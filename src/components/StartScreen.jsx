@@ -38,7 +38,7 @@ export default function StartScreen({ onStart }) {
           </div>
           <div className="rule-item">
             <span className="rule-icon">⏱️</span>
-            <span>30 giây cho mỗi câu</span>
+            <span>60 giây cho mỗi câu</span>
           </div>
           <div className="rule-item">
             <span className="rule-icon">⭐</span>

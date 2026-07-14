@@ -26,7 +26,7 @@ export function generateRoomCode() {
 /** Calculate points based on response time (1000 → 100 over 30s) */
 export function calculatePoints(timeMs, isCorrect) {
   if (!isCorrect) return 0;
-  const timeLimitMs = 30_000;
+  const timeLimitMs = 60_000;
   const minPts = 100;
   const maxPts = 1000;
   const ratio = Math.max(0, 1 - timeMs / timeLimitMs);

@@ -13,9 +13,10 @@ import {
 } from "../firebase/gameService";
 import { useConfetti, useSoundEffects } from "../hooks/useGameEffects";
 import Confetti from "../components/Confetti";
+import AudioController from "../components/AudioController";
 import "./HostPage.css";
 
-const TIME_LIMIT = 30;
+const TIME_LIMIT = 60;
 
 const DIFFICULTY_COLOR = {
   "Dễ": "#34d399",
@@ -181,6 +182,14 @@ export default function HostPage() {
   return (
     <div className="host-page">
       <Confetti particles={particles} />
+
+      {/* Audio controller widget */}
+      <div className="host-audio-wrapper">
+        <AudioController 
+          isPlayingBgm={phase === "lobby" || phase === "question" || phase === "reveal"} 
+          isPlayingVictory={phase === "finished"} 
+        />
+      </div>
 
       {/* ── LOBBY ── */}
       {phase === "lobby" && (

@@ -907,3 +907,19 @@
   .timer-wrap { width: 100px; height: 100px; }
   .reveal-body { grid-template-columns: 1fr; }
 }
+
+.host-audio-wrapper {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 1000;
+}
+
+@media (max-width: 600px) {
+  .host-audio-wrapper {
+    bottom: 1rem;
+    left: 1rem;
+    transform: scale(0.9);
+    transform-origin: bottom left;
+  }
+}

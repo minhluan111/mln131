@@ -6,6 +6,8 @@ import {
   checkRoom,
   listenRoom,
   pingPlayer,
+  listenPlayers,
+  listenAnswers,
 } from "../firebase/gameService";
 import { useConfetti, useSoundEffects } from "../hooks/useGameEffects";
 import Confetti from "../components/Confetti";
@@ -31,8 +33,10 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
   const [error, setError] = useState("");
   const [joining, setJoining] = useState(false);
   const [showHint, setShowHint] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(60);
   const [finalRoom, setFinalRoom] = useState(null);
+  const [players, setPlayers] = useState([]);
+  const [answeredCount, setAnsweredCount] = useState(0);
 
   const timerRef = useRef(null);
   const playerIdRef = useRef("");
@@ -74,7 +78,7 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
   useEffect(() => {
     if (!roomCode || !playerId) return;
 
-    const unsub = listenRoom(roomCode, (data) => {
+    const unsubRoom = listenRoom(roomCode, (data) => {
       if (!data) return;
       setRoom(data);
 
@@ -117,8 +121,13 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
       prevStateRef.current = data.state;
     });
 
+    const unsubPlayers = listenPlayers(roomCode, (pList) => {
+      setPlayers(pList);
+    });
+
     return () => {
-      unsub();
+      unsubRoom();
+      unsubPlayers();
       clearInterval(pingRef.current);
     };
   }, [roomCode, playerId]); // eslint-disable-line
@@ -132,7 +141,7 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
     stopTimer();
     const update = () => {
       const elapsed = Date.now() - questionStartTime;
-      const left = Math.max(0, 30 - Math.floor(elapsed / 1000));
+      const left = Math.max(0, 60 - Math.floor(elapsed / 1000));
       setTimeLeft(left);
       if (left <= 0) stopTimer();
     };
@@ -141,6 +150,17 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
   }, [stopTimer]);
 
   useEffect(() => () => stopTimer(), [stopTimer]);
+
+  // ── Listen to answers count for current question ──────────────────────────
+  useEffect(() => {
+    if (!roomCode || room?.currentQuestion === undefined || phase !== "question") return;
+
+    const unsubAnswers = listenAnswers(roomCode, room.currentQuestion, (ans) => {
+      setAnsweredCount(Object.keys(ans).length);
+    });
+
+    return () => unsubAnswers();
+  }, [roomCode, room?.currentQuestion, phase]);
 
   // ── Submit answer ────────────────────────────────────────────────────────
   const handleSubmit = async () => {
@@ -176,7 +196,8 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
 
   // ── Render ────────────────────────────────────────────────────────────────
   const currentQuestion = room ? quizData[room.currentQuestion] : null;
-  const timePercent = (timeLeft / 30) * 100;
+  const timePercent = (timeLeft / 60) * 100;
+  const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
 
   return (
     <div className="player-page">
@@ -404,26 +425,71 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
       {/* ── FINISHED ── */}
       {phase === "finished" && (
         <div className="player-final-screen">
-          <div className="final-emoji">🏁</div>
-          <h2 className="player-final-title">Trò chơi kết thúc!</h2>
-
-          <div className="player-score-card">
-            <div className="psc-label">Tổng điểm của bạn</div>
-            <div className="psc-score">{totalScore}</div>
-            <div className="psc-name">{playerName}</div>
+          <div className="final-header">
+            <h1 className="final-title">🏆 Kết Quả Cuối Cùng</h1>
+            <p className="final-subtitle">Liên minh Công – Nông – Trí</p>
           </div>
 
-          <div className="final-message">
-            {totalScore >= 8000
-              ? "🌟 Xuất sắc! Bạn là thiên tài!"
-              : totalScore >= 5000
-              ? "👍 Rất tốt! Cố lên nhé!"
-              : "💪 Cố gắng hơn lần sau bạn nhé!"}
+          {/* Podium */}
+          {sortedPlayers.length >= 1 && (
+            <div className="podium">
+              {/* 2nd */}
+              {sortedPlayers[1] && (
+                <div className="podium-slot podium-2">
+                  <div className="podium-avatar" style={{ background: sortedPlayers[1].color }}>
+                    {sortedPlayers[1].name[0].toUpperCase()}
+                  </div>
+                  <div className="podium-name">{sortedPlayers[1].name}</div>
+                  <div className="podium-score">{sortedPlayers[1].score} điểm</div>
+                  <div className="podium-bar bar-2">🥈</div>
+                </div>
+              )}
+              {/* 1st */}
+              <div className="podium-slot podium-1">
+                <div className="podium-crown">👑</div>
+                <div className="podium-avatar avatar-1" style={{ background: sortedPlayers[0].color }}>
+                  {sortedPlayers[0].name[0].toUpperCase()}
+                </div>
+                <div className="podium-name">{sortedPlayers[0].name}</div>
+                <div className="podium-score">{sortedPlayers[0].score} điểm</div>
+                <div className="podium-bar bar-1">🥇</div>
+              </div>
+              {/* 3rd */}
+              {sortedPlayers[2] && (
+                <div className="podium-slot podium-3">
+                  <div className="podium-avatar" style={{ background: sortedPlayers[2].color }}>
+                    {sortedPlayers[2].name[0].toUpperCase()}
+                  </div>
+                  <div className="podium-name">{sortedPlayers[2].name}</div>
+                  <div className="podium-score">{sortedPlayers[2].score} điểm</div>
+                  <div className="podium-bar bar-3">🥉</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Full ranking */}
+          <div className="final-ranking">
+            {sortedPlayers.slice(3).map((p, i) => (
+              <div
+                key={p.id}
+                className={`final-rank-row ${p.id === playerId ? "row-self" : ""}`}
+                style={{ animationDelay: `${i * 0.08}s` }}
+              >
+                <span className="final-rank-num">#{i + 4}</span>
+                <span className="final-rank-dot" style={{ background: p.color }} />
+                <span className="final-rank-name">{p.name}</span>
+                <span className="final-rank-score">{p.score} điểm</span>
+              </div>
+            ))}
           </div>
 
-          <p className="final-look-host">
-            👆 Nhìn lên màn hình để xem bảng xếp hạng!
-          </p>
+          {/* Prize message */}
+          {sortedPlayers[0] && (
+            <div className="prize-banner">
+              🎁 Xin chúc mừng <strong>{sortedPlayers[0].name}</strong> — người chiến thắng xuất sắc nhất! 🎉
+            </div>
+          )}
         </div>
       )}
     </div>
