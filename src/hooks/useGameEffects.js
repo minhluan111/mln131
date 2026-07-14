@@ -74,10 +74,51 @@ export function useTimer(initialTime, isActive, onTimeUp) {
   return { timeLeft, resetTimer };
 }
 
+let globalAudioCtx = null;
+
+function getAudioContext() {
+  if (typeof window === "undefined") return null;
+  if (!globalAudioCtx) {
+    globalAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (globalAudioCtx.state === "suspended") {
+    globalAudioCtx.resume().catch(() => {});
+  }
+  return globalAudioCtx;
+}
+
+// Add global listener to unlock on first click or touch (for iOS & Android Safari/Chrome)
+if (typeof window !== "undefined") {
+  const unlock = () => {
+    const ctx = getAudioContext();
+    if (ctx) {
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+      
+      if (ctx.state === "running") {
+        window.removeEventListener("click", unlock);
+        window.removeEventListener("touchstart", unlock);
+      }
+    }
+  };
+  window.addEventListener("click", unlock);
+  window.addEventListener("touchstart", unlock, { passive: true });
+}
+
 export function useSoundEffects() {
   const playSound = useCallback((type) => {
     try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const audioCtx = getAudioContext();
+      if (!audioCtx) return;
+      
+      // Ensure it is resumed (crucial for mobile when events trigger sound)
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume().catch(() => {});
+      }
+
       const oscillator = audioCtx.createOscillator();
       const gainNode = audioCtx.createGain();
 

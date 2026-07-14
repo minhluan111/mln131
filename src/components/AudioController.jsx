@@ -40,7 +40,7 @@ export default function AudioController({ isPlayingBgm, isPlayingVictory }) {
     }
   }, [isPlayingVictory]);
 
-  // Try playing audio on first user click anywhere (to bypass autoplay block)
+  // Try playing audio on first user click or touch anywhere (to bypass autoplay block on mobile)
   useEffect(() => {
     const startAudio = () => {
       if (isPlayingBgm && !isPlayingVictory && bgmRef.current) {
@@ -51,7 +51,11 @@ export default function AudioController({ isPlayingBgm, isPlayingVictory }) {
       }
     };
     window.addEventListener("click", startAudio);
-    return () => window.removeEventListener("click", startAudio);
+    window.addEventListener("touchstart", startAudio, { passive: true });
+    return () => {
+      window.removeEventListener("click", startAudio);
+      window.removeEventListener("touchstart", startAudio);
+    };
   }, [isPlayingBgm, isPlayingVictory]);
 
   return (
