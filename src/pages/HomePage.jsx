@@ -18,7 +18,7 @@ export default function HomePage() {
           <div className="hero-emoji">🏛️</div>
           <h1 className="hero-title">
             Trò Chơi<br />
-            <span className="hero-accent">Giải Mã Từ Khóa</span>
+            <span className="hero-accent">Giải Mã Đáp Án</span>
           </h1>
           <p className="hero-desc">
             Liên minh Công – Nông – Trí<br />

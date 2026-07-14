@@ -197,7 +197,7 @@ export default function HostPage() {
           <div className="lobby-header">
             <div className="lobby-title-group">
               <span className="lobby-badge">🏛️ LIÊN MINH CÔNG – NÔNG – TRÍ</span>
-              <h1 className="lobby-title">Trò Chơi Giải Mã Từ Khóa</h1>
+              <h1 className="lobby-title">Trò Chơi Giải Mã Đáp Án</h1>
             </div>
             <div className="lobby-meta">
               <span>📝 {quizData.length} câu hỏi</span>
@@ -208,7 +208,7 @@ export default function HostPage() {
           <div className="lobby-main">
             {/* QR + Code */}
             <div className="lobby-join-panel">
-              <div className="join-instruction">📱 Học sinh quét mã để tham gia</div>
+              <div className="join-instruction">📱 Người chơi quét mã để tham gia</div>
               <img className="qr-code" src={qrUrl} alt="QR join" />
               <div className="room-code-display">
                 <span className="code-label">MÃ PHÒNG</span>
@@ -230,7 +230,7 @@ export default function HostPage() {
                     <div className="waiting-dots">
                       <span /><span /><span />
                     </div>
-                    <p>Chờ học sinh tham gia...</p>
+                    <p>Chờ người chơi tham gia...</p>
                   </div>
                 ) : (
                   players.map((p, i) => (
