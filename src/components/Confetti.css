@@ -1,0 +1,36 @@
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-particle {
+  position: absolute;
+  top: -20px;
+  animation: confetti-fall linear forwards;
+  opacity: 0;
+}
+
+.confetti-circle {
+  border-radius: 50%;
+}
+
+.confetti-rect {
+  border-radius: 2px;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) translateX(var(--tx)) rotate(var(--rot));
+  }
+}
