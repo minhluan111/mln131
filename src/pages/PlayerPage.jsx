@@ -209,7 +209,7 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           <div className="join-logo">🤝</div>
           <h1 className="join-title">
             Giải Mã<br />
-            <span>Từ Khóa</span>
+            <span>Đáp Án</span>
           </h1>
           <p className="join-subtitle">Liên minh Công – Nông – Trí</p>
 
