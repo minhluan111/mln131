@@ -755,9 +755,7 @@
 
 @media (max-width: 600px) {
   .player-audio-wrapper {
-    top: 0.75rem;
-    left: 0.75rem;
-    transform: scale(0.85);
-    transform-origin: top left;
+    top: 0.5rem;
+    left: 0.5rem;
   }
 }
