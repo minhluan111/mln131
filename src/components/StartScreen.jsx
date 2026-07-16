@@ -23,8 +23,6 @@ export default function StartScreen({ onStart }) {
 
         <div className="start-topic">
           <div className="topic-icon">🤝</div>
-          <h2>Liên minh Công – Nông – Trí</h2>
-          <p>trong công cuộc Công nghiệp hóa, Hiện đại hóa ở Việt Nam</p>
         </div>
 
         <div className="start-rules">

@@ -17,13 +17,10 @@ export default function HomePage() {
         <div className="home-hero">
           <div className="hero-emoji">🏛️</div>
           <h1 className="hero-title">
-            Trò Chơi<br />
+            Trò Chơi
+            <br />
             <span className="hero-accent">Giải Mã Đáp Án</span>
           </h1>
-          <p className="hero-desc">
-            Liên minh Công – Nông – Trí<br />
-            trong công cuộc Công nghiệp hóa, Hiện đại hóa
-          </p>
         </div>
 
         <div className="home-cards">
