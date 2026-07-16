@@ -19,9 +19,9 @@ import "./HostPage.css";
 const TIME_LIMIT = 60;
 
 const DIFFICULTY_COLOR = {
-  "Dễ": "#34d399",
+  Dễ: "#34d399",
   "Trung bình": "#fbbf24",
-  "Khó": "#f87171",
+  Khó: "#f87171",
 };
 
 export default function HostPage() {
@@ -165,7 +165,9 @@ export default function HostPage() {
         <div className="error-icon">⚠️</div>
         <h2>Lỗi kết nối</h2>
         <p>{error}</p>
-        <p className="error-hint">Xem hướng dẫn trong file <code>src/firebase/config.js</code></p>
+        <p className="error-hint">
+          Xem hướng dẫn trong file <code>src/firebase/config.js</code>
+        </p>
       </div>
     );
   }
@@ -185,9 +187,11 @@ export default function HostPage() {
 
       {/* Audio controller widget */}
       <div className="host-audio-wrapper">
-        <AudioController 
-          isPlayingBgm={phase === "lobby" || phase === "question" || phase === "reveal"} 
-          isPlayingVictory={phase === "finished"} 
+        <AudioController
+          isPlayingBgm={
+            phase === "lobby" || phase === "question" || phase === "reveal"
+          }
+          isPlayingVictory={phase === "finished"}
         />
       </div>
 
@@ -196,7 +200,7 @@ export default function HostPage() {
         <div className="lobby-screen">
           <div className="lobby-header">
             <div className="lobby-title-group">
-              <span className="lobby-badge">🏛️ LIÊN MINH CÔNG – NÔNG – TRÍ</span>
+              <span className="lobby-badge">🏛️</span>
               <h1 className="lobby-title">Trò Chơi Giải Mã Đáp Án</h1>
             </div>
             <div className="lobby-meta">
@@ -208,7 +212,9 @@ export default function HostPage() {
           <div className="lobby-main">
             {/* QR + Code */}
             <div className="lobby-join-panel">
-              <div className="join-instruction">📱 Người chơi quét mã để tham gia</div>
+              <div className="join-instruction">
+                📱 Người chơi quét mã để tham gia
+              </div>
               <img className="qr-code" src={qrUrl} alt="QR join" />
               <div className="room-code-display">
                 <span className="code-label">MÃ PHÒNG</span>
@@ -228,7 +234,9 @@ export default function HostPage() {
                 {players.length === 0 ? (
                   <div className="no-players">
                     <div className="waiting-dots">
-                      <span /><span /><span />
+                      <span />
+                      <span />
+                      <span />
                     </div>
                     <p>Chờ người chơi tham gia...</p>
                   </div>
@@ -237,9 +245,15 @@ export default function HostPage() {
                     <div
                       key={p.id}
                       className="player-chip"
-                      style={{ borderColor: p.color, animationDelay: `${i * 0.05}s` }}
+                      style={{
+                        borderColor: p.color,
+                        animationDelay: `${i * 0.05}s`,
+                      }}
                     >
-                      <span className="player-avatar" style={{ background: p.color }}>
+                      <span
+                        className="player-avatar"
+                        style={{ background: p.color }}
+                      >
                         {p.name[0].toUpperCase()}
                       </span>
                       <span className="player-name">{p.name}</span>
@@ -293,9 +307,18 @@ export default function HostPage() {
           <div className="q-body">
             {/* Left: question content */}
             <div className="q-content">
-              <div className="q-difficulty-tag" style={{ color: DIFFICULTY_COLOR[quizData[currentQ].difficulty] }}>
-                {quizData[currentQ].difficulty === "Dễ" ? "🟢" : quizData[currentQ].difficulty === "Trung bình" ? "🟡" : "🔴"}
-                {" "}{quizData[currentQ].difficulty}
+              <div
+                className="q-difficulty-tag"
+                style={{
+                  color: DIFFICULTY_COLOR[quizData[currentQ].difficulty],
+                }}
+              >
+                {quizData[currentQ].difficulty === "Dễ"
+                  ? "🟢"
+                  : quizData[currentQ].difficulty === "Trung bình"
+                    ? "🟡"
+                    : "🔴"}{" "}
+                {quizData[currentQ].difficulty}
               </div>
               <p className="q-text">{quizData[currentQ].question}</p>
 
@@ -314,9 +337,9 @@ export default function HostPage() {
                           {ch}
                         </span>
                       ))}
-                      {pi < quizData[currentQ].scrambled.split(" - ").length - 1 && (
-                        <span className="q-scrambled-sep">–</span>
-                      )}
+                      {pi <
+                        quizData[currentQ].scrambled.split(" - ").length -
+                          1 && <span className="q-scrambled-sep">–</span>}
                     </span>
                   ))}
                 </div>
@@ -328,16 +351,28 @@ export default function HostPage() {
               {/* Circular timer */}
               <div className="timer-wrap">
                 <svg viewBox="0 0 120 120" className="timer-svg">
-                  <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
                   <circle
-                    cx="60" cy="60" r="52" fill="none"
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.06)"
+                    strokeWidth="10"
+                  />
+                  <circle
+                    cx="60"
+                    cy="60"
+                    r="52"
+                    fill="none"
                     stroke={timerColor}
                     strokeWidth="10"
                     strokeLinecap="round"
                     strokeDasharray={`${2 * Math.PI * 52}`}
                     strokeDashoffset={`${2 * Math.PI * 52 * (1 - timePercent / 100)}`}
                     transform="rotate(-90 60 60)"
-                    style={{ transition: "stroke-dashoffset 1s linear, stroke 0.5s" }}
+                    style={{
+                      transition: "stroke-dashoffset 1s linear, stroke 0.5s",
+                    }}
                   />
                 </svg>
                 <div className="timer-value" style={{ color: timerColor }}>
@@ -351,7 +386,13 @@ export default function HostPage() {
                 {leaderboard.slice(0, 5).map((p, i) => (
                   <div key={p.id} className="mini-lb-row">
                     <span className="mini-lb-rank">
-                      {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i + 1}.`}
+                      {i === 0
+                        ? "🥇"
+                        : i === 1
+                          ? "🥈"
+                          : i === 2
+                            ? "🥉"
+                            : `${i + 1}.`}
                     </span>
                     <span
                       className="mini-lb-dot"
@@ -371,7 +412,9 @@ export default function HostPage() {
       {phase === "reveal" && (
         <div className="reveal-screen">
           <div className="reveal-header">
-            <span>Câu {currentQ + 1} / {quizData.length} — Đáp án</span>
+            <span>
+              Câu {currentQ + 1} / {quizData.length} — Đáp án
+            </span>
           </div>
 
           <div className="reveal-body">
@@ -379,22 +422,32 @@ export default function HostPage() {
               <p className="reveal-question">{quizData[currentQ].question}</p>
               <div className="reveal-answer-box">
                 <div className="reveal-label">✅ Đáp án đúng</div>
-                <div className="reveal-answer">{quizData[currentQ].correct}</div>
+                <div className="reveal-answer">
+                  {quizData[currentQ].correct}
+                </div>
               </div>
 
               {/* Answer stats */}
               <div className="answer-stats">
                 <div className="stat-chip stat-correct-chip">
                   <span>✅</span>
-                  <span>Đúng: {Object.values(answers).filter(a => a.isCorrect).length}</span>
+                  <span>
+                    Đúng:{" "}
+                    {Object.values(answers).filter((a) => a.isCorrect).length}
+                  </span>
                 </div>
                 <div className="stat-chip stat-wrong-chip">
                   <span>❌</span>
-                  <span>Sai: {Object.values(answers).filter(a => !a.isCorrect).length}</span>
+                  <span>
+                    Sai:{" "}
+                    {Object.values(answers).filter((a) => !a.isCorrect).length}
+                  </span>
                 </div>
                 <div className="stat-chip stat-skip-chip">
                   <span>⏭️</span>
-                  <span>Bỏ qua: {players.length - Object.keys(answers).length}</span>
+                  <span>
+                    Bỏ qua: {players.length - Object.keys(answers).length}
+                  </span>
                 </div>
               </div>
             </div>
@@ -404,18 +457,35 @@ export default function HostPage() {
               <div className="reveal-lb-title">📊 Bảng xếp hạng</div>
               <div className="reveal-lb-list">
                 {leaderboard.slice(0, 8).map((p, i) => (
-                  <div key={p.id} className="reveal-lb-row" style={{ animationDelay: `${i * 0.1}s` }}>
+                  <div
+                    key={p.id}
+                    className="reveal-lb-row"
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                  >
                     <span className="reveal-lb-rank">
-                      {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}
+                      {i === 0
+                        ? "🥇"
+                        : i === 1
+                          ? "🥈"
+                          : i === 2
+                            ? "🥉"
+                            : `#${i + 1}`}
                     </span>
-                    <span className="reveal-lb-avatar" style={{ background: p.color }}>
+                    <span
+                      className="reveal-lb-avatar"
+                      style={{ background: p.color }}
+                    >
                       {p.name[0].toUpperCase()}
                     </span>
                     <span className="reveal-lb-name">{p.name}</span>
                     <div className="reveal-lb-right">
                       {answers[p.id] && (
-                        <span className={`reveal-lb-ans ${answers[p.id].isCorrect ? "ans-correct" : "ans-wrong"}`}>
-                          {answers[p.id].isCorrect ? "+" + answers[p.id].points : "0"}
+                        <span
+                          className={`reveal-lb-ans ${answers[p.id].isCorrect ? "ans-correct" : "ans-wrong"}`}
+                        >
+                          {answers[p.id].isCorrect
+                            ? "+" + answers[p.id].points
+                            : "0"}
                         </span>
                       )}
                       <span className="reveal-lb-score">{p.score}</span>
@@ -439,7 +509,6 @@ export default function HostPage() {
         <div className="final-screen">
           <div className="final-header">
             <h1 className="final-title">🏆 Kết Quả Cuối Cùng</h1>
-            <p className="final-subtitle">Liên minh Công – Nông – Trí</p>
           </div>
 
           {/* Podium */}
@@ -448,18 +517,26 @@ export default function HostPage() {
               {/* 2nd */}
               {leaderboard[1] && (
                 <div className="podium-slot podium-2">
-                  <div className="podium-avatar" style={{ background: leaderboard[1].color }}>
+                  <div
+                    className="podium-avatar"
+                    style={{ background: leaderboard[1].color }}
+                  >
                     {leaderboard[1].name[0].toUpperCase()}
                   </div>
                   <div className="podium-name">{leaderboard[1].name}</div>
-                  <div className="podium-score">{leaderboard[1].score} điểm</div>
+                  <div className="podium-score">
+                    {leaderboard[1].score} điểm
+                  </div>
                   <div className="podium-bar bar-2">🥈</div>
                 </div>
               )}
               {/* 1st */}
               <div className="podium-slot podium-1">
                 <div className="podium-crown">👑</div>
-                <div className="podium-avatar avatar-1" style={{ background: leaderboard[0].color }}>
+                <div
+                  className="podium-avatar avatar-1"
+                  style={{ background: leaderboard[0].color }}
+                >
                   {leaderboard[0].name[0].toUpperCase()}
                 </div>
                 <div className="podium-name">{leaderboard[0].name}</div>
@@ -469,11 +546,16 @@ export default function HostPage() {
               {/* 3rd */}
               {leaderboard[2] && (
                 <div className="podium-slot podium-3">
-                  <div className="podium-avatar" style={{ background: leaderboard[2].color }}>
+                  <div
+                    className="podium-avatar"
+                    style={{ background: leaderboard[2].color }}
+                  >
                     {leaderboard[2].name[0].toUpperCase()}
                   </div>
                   <div className="podium-name">{leaderboard[2].name}</div>
-                  <div className="podium-score">{leaderboard[2].score} điểm</div>
+                  <div className="podium-score">
+                    {leaderboard[2].score} điểm
+                  </div>
                   <div className="podium-bar bar-3">🥉</div>
                 </div>
               )}
@@ -483,9 +565,16 @@ export default function HostPage() {
           {/* Full ranking */}
           <div className="final-ranking">
             {leaderboard.slice(3).map((p, i) => (
-              <div key={p.id} className="final-rank-row" style={{ animationDelay: `${i * 0.08}s` }}>
+              <div
+                key={p.id}
+                className="final-rank-row"
+                style={{ animationDelay: `${i * 0.08}s` }}
+              >
                 <span className="final-rank-num">#{i + 4}</span>
-                <span className="final-rank-dot" style={{ background: p.color }} />
+                <span
+                  className="final-rank-dot"
+                  style={{ background: p.color }}
+                />
                 <span className="final-rank-name">{p.name}</span>
                 <span className="final-rank-score">{p.score} điểm</span>
               </div>
@@ -495,7 +584,8 @@ export default function HostPage() {
           {/* Prize message */}
           {leaderboard[0] && (
             <div className="prize-banner">
-              🎁 Xin chúc mừng <strong>{leaderboard[0].name}</strong> — người chiến thắng xuất sắc nhất! 🎉
+              🎁 Xin chúc mừng <strong>{leaderboard[0].name}</strong> — người
+              chiến thắng xuất sắc nhất! 🎉
             </div>
           )}
         </div>
