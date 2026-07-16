@@ -14,13 +14,13 @@ import Confetti from "../components/Confetti";
 import "./PlayerPage.css";
 
 const DIFFICULTY_COLOR = {
-  "Dễ": "#34d399",
+  Dễ: "#34d399",
   "Trung bình": "#fbbf24",
-  "Khó": "#f87171",
+  Khó: "#f87171",
 };
 
 export default function PlayerPage({ roomCode: initialRoomCode }) {
-  const [phase, setPhase] = useState("join");   // join|waiting|question|result|finished
+  const [phase, setPhase] = useState("join"); // join|waiting|question|result|finished
   const [roomCodeInput, setRoomCodeInput] = useState(initialRoomCode || "");
   const [playerName, setPlayerName] = useState("");
   const [playerId, setPlayerId] = useState("");
@@ -137,27 +137,39 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
     if (timerRef.current) clearInterval(timerRef.current);
   }, []);
 
-  const startLocalTimer = useCallback((questionStartTime) => {
-    stopTimer();
-    const update = () => {
-      const elapsed = Date.now() - questionStartTime;
-      const left = Math.max(0, 60 - Math.floor(elapsed / 1000));
-      setTimeLeft(left);
-      if (left <= 0) stopTimer();
-    };
-    update();
-    timerRef.current = setInterval(update, 500);
-  }, [stopTimer]);
+  const startLocalTimer = useCallback(
+    (questionStartTime) => {
+      stopTimer();
+      const update = () => {
+        const elapsed = Date.now() - questionStartTime;
+        const left = Math.max(0, 60 - Math.floor(elapsed / 1000));
+        setTimeLeft(left);
+        if (left <= 0) stopTimer();
+      };
+      update();
+      timerRef.current = setInterval(update, 500);
+    },
+    [stopTimer],
+  );
 
   useEffect(() => () => stopTimer(), [stopTimer]);
 
   // ── Listen to answers count for current question ──────────────────────────
   useEffect(() => {
-    if (!roomCode || room?.currentQuestion === undefined || phase !== "question") return;
+    if (
+      !roomCode ||
+      room?.currentQuestion === undefined ||
+      phase !== "question"
+    )
+      return;
 
-    const unsubAnswers = listenAnswers(roomCode, room.currentQuestion, (ans) => {
-      setAnsweredCount(Object.keys(ans).length);
-    });
+    const unsubAnswers = listenAnswers(
+      roomCode,
+      room.currentQuestion,
+      (ans) => {
+        setAnsweredCount(Object.keys(ans).length);
+      },
+    );
 
     return () => unsubAnswers();
   }, [roomCode, room?.currentQuestion, phase]);
@@ -175,7 +187,7 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
         playerId,
         userAnswer,
         quizData[room.currentQuestion].correct,
-        room.questionStartTime
+        room.questionStartTime,
       );
       setLastResult(result);
       setTotalScore((s) => s + result.points);
@@ -208,10 +220,10 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
         <div className="join-screen">
           <div className="join-logo">🤝</div>
           <h1 className="join-title">
-            Giải Mã<br />
+            Giải Mã
+            <br />
             <span>Đáp Án</span>
           </h1>
-          <p className="join-subtitle">Liên minh Công – Nông – Trí</p>
 
           <div className="join-form">
             {!initialRoomCode && (
@@ -221,7 +233,9 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
                   className="join-input code-input"
                   type="text"
                   value={roomCodeInput}
-                  onChange={(e) => setRoomCodeInput(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setRoomCodeInput(e.target.value.toUpperCase())
+                  }
                   placeholder="VD: ABC123"
                   maxLength={6}
                   autoComplete="off"
@@ -268,8 +282,12 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           <div className="waiting-avatar" style={{ background: "#818cf8" }}>
             {playerName[0]?.toUpperCase()}
           </div>
-          <h2 className="waiting-name">Xin chào, <span>{playerName}</span>!</h2>
-          <p className="waiting-room">Phòng: <strong>{roomCode}</strong></p>
+          <h2 className="waiting-name">
+            Xin chào, <span>{playerName}</span>!
+          </h2>
+          <p className="waiting-room">
+            Phòng: <strong>{roomCode}</strong>
+          </p>
 
           <div className="waiting-animation">
             <div className="pulse-ring" />
@@ -294,15 +312,23 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           </div>
 
           <div className="pq-header">
-            <span className="pq-num">Câu {(room?.currentQuestion ?? 0) + 1} / {quizData.length}</span>
+            <span className="pq-num">
+              Câu {(room?.currentQuestion ?? 0) + 1} / {quizData.length}
+            </span>
             <span
               className="pq-difficulty"
               style={{ color: DIFFICULTY_COLOR[currentQuestion.difficulty] }}
             >
-              {currentQuestion.difficulty === "Dễ" ? "🟢" : currentQuestion.difficulty === "Trung bình" ? "🟡" : "🔴"}
-              {" "}{currentQuestion.difficulty}
+              {currentQuestion.difficulty === "Dễ"
+                ? "🟢"
+                : currentQuestion.difficulty === "Trung bình"
+                  ? "🟡"
+                  : "🔴"}{" "}
+              {currentQuestion.difficulty}
             </span>
-            <span className={`pq-timer ${timeLeft <= 5 ? "pq-timer-crit" : ""}`}>
+            <span
+              className={`pq-timer ${timeLeft <= 5 ? "pq-timer-crit" : ""}`}
+            >
               ⏱ {timeLeft}s
             </span>
           </div>
@@ -335,7 +361,8 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           {/* Hint */}
           {showHint && (
             <div className="pq-hint">
-              💡 Gợi ý: <strong>{currentQuestion.correct.length}</strong> ký tự, bắt đầu bằng <strong>"{currentQuestion.correct[0]}"</strong>
+              💡 Gợi ý: <strong>{currentQuestion.correct.length}</strong> ký tự,
+              bắt đầu bằng <strong>"{currentQuestion.correct[0]}"</strong>
             </div>
           )}
 
@@ -355,7 +382,10 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
               />
               <div className="pq-actions">
                 {!showHint && (
-                  <button className="pq-hint-btn" onClick={() => setShowHint(true)}>
+                  <button
+                    className="pq-hint-btn"
+                    onClick={() => setShowHint(true)}
+                  >
                     💡 Gợi ý
                   </button>
                 )}
@@ -371,12 +401,18 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           ) : (
             <div className="pq-submitted">
               <div className="submitted-icon">✅</div>
-              <p>Đã nộp: <strong>"{userAnswer}"</strong></p>
+              <p>
+                Đã nộp: <strong>"{userAnswer}"</strong>
+              </p>
               <p className="submitted-hint">Chờ host hiện đáp án...</p>
               {lastResult && (
-                <div className={`pq-quick-result ${lastResult.isCorrect ? "qr-correct" : "qr-wrong"}`}>
+                <div
+                  className={`pq-quick-result ${lastResult.isCorrect ? "qr-correct" : "qr-wrong"}`}
+                >
                   {lastResult.isCorrect ? (
-                    <>🎉 Chính xác! +<strong>{lastResult.points}</strong> điểm</>
+                    <>
+                      🎉 Chính xác! +<strong>{lastResult.points}</strong> điểm
+                    </>
                   ) : (
                     <>😢 Chưa đúng rồi!</>
                   )}
@@ -390,7 +426,9 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
       {/* ── RESULT (after reveal) ── */}
       {phase === "result" && currentQuestion && (
         <div className="player-result-screen">
-          <div className={`result-icon-big ${lastResult?.isCorrect ? "icon-correct" : "icon-wrong"}`}>
+          <div
+            className={`result-icon-big ${lastResult?.isCorrect ? "icon-correct" : "icon-wrong"}`}
+          >
             {lastResult?.isCorrect ? "🎉" : "😢"}
           </div>
 
@@ -408,7 +446,9 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           </div>
 
           {lastResult && (
-            <div className={`result-points ${lastResult.isCorrect ? "pts-green" : "pts-red"}`}>
+            <div
+              className={`result-points ${lastResult.isCorrect ? "pts-green" : "pts-red"}`}
+            >
               {lastResult.isCorrect ? `+${lastResult.points} điểm` : "0 điểm"}
             </div>
           )}
@@ -427,7 +467,6 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
         <div className="player-final-screen">
           <div className="final-header">
             <h1 className="final-title">🏆 Kết Quả Cuối Cùng</h1>
-            <p className="final-subtitle">Liên minh Công – Nông – Trí</p>
           </div>
 
           {/* Podium */}
@@ -436,32 +475,47 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
               {/* 2nd */}
               {sortedPlayers[1] && (
                 <div className="podium-slot podium-2">
-                  <div className="podium-avatar" style={{ background: sortedPlayers[1].color }}>
+                  <div
+                    className="podium-avatar"
+                    style={{ background: sortedPlayers[1].color }}
+                  >
                     {sortedPlayers[1].name[0].toUpperCase()}
                   </div>
                   <div className="podium-name">{sortedPlayers[1].name}</div>
-                  <div className="podium-score">{sortedPlayers[1].score} điểm</div>
+                  <div className="podium-score">
+                    {sortedPlayers[1].score} điểm
+                  </div>
                   <div className="podium-bar bar-2">🥈</div>
                 </div>
               )}
               {/* 1st */}
               <div className="podium-slot podium-1">
                 <div className="podium-crown">👑</div>
-                <div className="podium-avatar avatar-1" style={{ background: sortedPlayers[0].color }}>
+                <div
+                  className="podium-avatar avatar-1"
+                  style={{ background: sortedPlayers[0].color }}
+                >
                   {sortedPlayers[0].name[0].toUpperCase()}
                 </div>
                 <div className="podium-name">{sortedPlayers[0].name}</div>
-                <div className="podium-score">{sortedPlayers[0].score} điểm</div>
+                <div className="podium-score">
+                  {sortedPlayers[0].score} điểm
+                </div>
                 <div className="podium-bar bar-1">🥇</div>
               </div>
               {/* 3rd */}
               {sortedPlayers[2] && (
                 <div className="podium-slot podium-3">
-                  <div className="podium-avatar" style={{ background: sortedPlayers[2].color }}>
+                  <div
+                    className="podium-avatar"
+                    style={{ background: sortedPlayers[2].color }}
+                  >
                     {sortedPlayers[2].name[0].toUpperCase()}
                   </div>
                   <div className="podium-name">{sortedPlayers[2].name}</div>
-                  <div className="podium-score">{sortedPlayers[2].score} điểm</div>
+                  <div className="podium-score">
+                    {sortedPlayers[2].score} điểm
+                  </div>
                   <div className="podium-bar bar-3">🥉</div>
                 </div>
               )}
@@ -477,7 +531,10 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
                 style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <span className="final-rank-num">#{i + 4}</span>
-                <span className="final-rank-dot" style={{ background: p.color }} />
+                <span
+                  className="final-rank-dot"
+                  style={{ background: p.color }}
+                />
                 <span className="final-rank-name">{p.name}</span>
                 <span className="final-rank-score">{p.score} điểm</span>
               </div>
@@ -487,7 +544,8 @@ export default function PlayerPage({ roomCode: initialRoomCode }) {
           {/* Prize message */}
           {sortedPlayers[0] && (
             <div className="prize-banner">
-              🎁 Xin chúc mừng <strong>{sortedPlayers[0].name}</strong> — người chiến thắng xuất sắc nhất! 🎉
+              🎁 Xin chúc mừng <strong>{sortedPlayers[0].name}</strong> — người
+              chiến thắng xuất sắc nhất! 🎉
             </div>
           )}
         </div>
